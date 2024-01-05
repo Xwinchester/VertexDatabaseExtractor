@@ -18,7 +18,7 @@ class VertextDatabaseExtractor:
     into a new Excel file named 'vertex_database.xlsx'. 
     """
         
-    FOLDER_PATH = r"C:\Users\dwinc\Desktop\parts"# Use the 'r' (to use the raw sting) before the folder path to not have to double the '\'
+    FOLDER_PATH = r"path_to_parts_folders"# Use the 'r' (to use the raw sting) before the folder path to not have to double the '\'
     OUTPUT_FILE_NAME = 'vertex_database.xlsx'
     
     def __init__(self):

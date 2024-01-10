@@ -24,7 +24,7 @@ class VertextDatabaseExtractor:
     
     def __init__(self):
         # Configure logging
-        crawlerConfig = CrawlerConfig()
+        self.crawlerConfig = CrawlerConfig()
         
         # Log a message indicating the start of the script
         logging.info("Starting Vertex Database Extractor")
@@ -35,11 +35,11 @@ class VertextDatabaseExtractor:
         self.FILE_COUNTER = 0
                 
         # Crawl the folder
-        if crawlerConfig.DEBUG:
-            self.crawl_folder_debugging(crawlerConfig.DEBUG_FOLDER_PATH)
+        if self.crawlerConfig.DEBUG:
+            self.crawl_folder_debugging(self.crawlerConfig.DEBUG_FOLDER_PATH)
             logging.warning("Running in debug mode.")
         else:
-            self.crawl_folder(crawlerConfig.SEARCHING_FOLDER_PATH)
+            self.crawl_folder(self.crawlerConfig.SEARCHING_FOLDER_PATH)
         print("")
         
         # Output the data into the database
@@ -47,12 +47,12 @@ class VertextDatabaseExtractor:
                 logging.warning("No data found, no output.")
         else:
             logging.info(f"Extracted data from {self.FILE_COUNTER} files.")
-            if crawlerConfig.MAKE_HTML:
+            if self.crawlerConfig.MAKE_HTML:
                 logging.info("Outputting to HTML file.")
-                HTMLOutput(pd.DataFrame(self.data), crawlerConfig)
-            if crawlerConfig.MAKE_XLSX:
+                HTMLOutput(pd.DataFrame(self.data), self.crawlerConfig)
+            if self.crawlerConfig.MAKE_XLSX:
                 logging.info("Outputting to XLSX file.")
-                ExcelOutput(pd.DataFrame(self.data), crawlerConfig)
+                ExcelOutput(pd.DataFrame(self.data), self.crawlerConfig)
 
         # Log a message indicating the end of the script
         logging.info("Vertex Database Extractor completed")                
@@ -72,8 +72,8 @@ class VertextDatabaseExtractor:
             file_path = os.path.join(folder_path, file_name)
             if os.path.isdir(file_path):
                 self.crawl_folder(file_path)
-            elif crawlerConfig.DATA_SHEET_FOLDER_NAME.lower().replace(" ", "") in file_path.lower().replace(" ", ""):
-                if file_name.upper() in crawlerConfig.SEARCHED_FILE_NAME:
+            elif self.crawlerConfig.DATA_SHEET_FOLDER_NAME.lower().replace(" ", "") in file_path.lower().replace(" ", ""):
+                if file_name.upper() in self.crawlerConfig.SEARCHED_FILE_NAME:
                     self.FILE_COUNTER += 1
                     print(f"File {self.FILE_COUNTER}.", end='\r')
                     self.extract_data(file_path)
@@ -111,7 +111,7 @@ class HTMLOutput:
         self.df = df
         self.crawlerConfig = crawlerConfig
         # Read the base HTML template
-        with open(crawlerConfig.BASE_HTML_FILE, 'r') as file:
+        with open(self.crawlerConfig.BASE_HTML_FILE, 'r') as file:
             self.html_data = file.read()
 
         # Update web-page title
@@ -172,7 +172,7 @@ class HTMLOutput:
 class ExcelOutput:
             
     def __init__(self, df, crawlerConfig):  
-         self.crawlerConfig = self.crawlerConfig
+         self.crawlerConfig = crawlerConfig
          self.output()
          self.add_autofilters()
          
